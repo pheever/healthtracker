@@ -1,0 +1,39 @@
+version: '3'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.1
+    hostname: elasticsearch
+    environment:
+      - node.name=elasticsearch-1
+      - cluster.name=healthtracker
+      - cluster.initial_master_nodes=elasticsearch-1
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes: ['healthtracker:/usr/share/elasticsearch/data']
+    ports: ['9200:9200']
+    networks: ['healthtracker']
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.11.1
+    hostname: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports: ['5601:5601']
+    networks: ['healthtracker']
+  server:
+    image: nginx
+    hostname: server
+    ports: ['8080:80']
+    volumes: ['./:/usr/share/nginx/html']
+    networks: ['healthtracker']
+volumes:
+  healthtracker:
+    driver: local
+networks:
+  healthtracker:
+    driver: bridge
+
+

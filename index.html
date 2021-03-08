@@ -1,0 +1,25 @@
+<html>
+	<head>
+		<title>Health Tracker</title>
+	</head>
+	<body>
+		<h1>This is health tracker</h1>
+		<script>
+			function AddData(){
+				var url = "http://localhost:9200";
+				var method = "POST";
+				var shouldBeAsync = true;
+				var request = new XMLHttpRequest();
+				request.onload = function(){
+					var status = request.status; // HTTP response status, e.g., 200 for "200 OK"
+					var data = request.respo; // Returned data, e.g., an HTML document.
+				}
+				request.open(method, url, shouldBeAsync);
+				//Access-Control-Allow-Origin: https://amazing.site
+				request.setRequestHeader("Access-Control-Allow-Origin", "*");
+				var postData = JSON.stringify({"a":1,"b":[true, true, false]})
+				request.send(postData);
+			}
+		</script>
+	</body>
+</html>
